@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   }
 
   resource :profiles
+  resources :projects
 end

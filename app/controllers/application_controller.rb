@@ -1,9 +1,14 @@
 class ApplicationController < ActionController::Base
+  include Pundit
   protect_from_forgery with: :null_session
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_active_storage_url_options
-
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   private
+
+  def user_not_authorized
+    render json: {errors: {message:"you are not authorize to perform this action"}}, status: :unprocessable_entity
+  end
 
   def set_active_storage_url_options
     ActiveStorage::Current.url_options = { host: request.base_url }
